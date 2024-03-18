@@ -1,24 +1,29 @@
 const std = @import("std");
+const print = std.debug.print;
 
-pub fn main() !void {
-    // Prints to stderr (it's a shortcut based on `std.io.getStdErr()`)
-    std.debug.print("All your {s} are belong to us.\n", .{"codebase"});
+const width = 256;
+const height = 256;
 
-    // stdout is for the actual output of your application, for example if you
-    // are implementing gzip, then only the compressed bytes should be sent to
-    // stdout, not any debugging messages.
-    const stdout_file = std.io.getStdOut().writer();
-    var bw = std.io.bufferedWriter(stdout_file);
-    const stdout = bw.writer();
+const Rgb = struct {
+    r: u8,
+    g: u8,
+    b: u8,
+    fn init(r: u8, g: u8, b: u8) Rgb {
+        return Rgb{ .r = r, .g = g, .b = b };
+    }
+};
 
-    try stdout.print("Run `zig build test` to run the tests.\n", .{});
+fn xpto(comptime size: u32) type {
+    var data: [size]Rgb = {};
+    var i = 0;
+    while (i < size) : (i += 1) {
+        data[i] = Rgb{ 255, 255, 255 };
+    }
 
-    try bw.flush(); // don't forget to flush!
+    return @TypeOf("wasd");
 }
 
-test "simple test" {
-    var list = std.ArrayList(i32).init(std.testing.allocator);
-    defer list.deinit(); // try commenting this out and see if zig detects the memory leak!
-    try list.append(42);
-    try std.testing.expectEqual(@as(i32, 42), list.pop());
+pub fn main() !void {
+    const foo = Rgb{ 255, 255, 0 };
+    print("r:{d} g:{d} b:{d} {s}", .{ foo.r, foo.g, foo.b, @typeName(@TypeOf("wasd"[0..])) });
 }
