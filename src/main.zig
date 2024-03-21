@@ -1,8 +1,8 @@
 const std = @import("std");
 const print = std.debug.print;
 
-const width = 10;
-const height = 10;
+const width = 100;
+const height = 100;
 
 const Rgb = struct {
     r: u32,
@@ -59,6 +59,7 @@ fn gen_03(comptime data: *const [width * height]Rgb, comptime size: usize) [size
 }
 
 pub fn main() !void {
+    @setEvalBranchQuota(height * width + width + 1);
     const data = gen_01();
     const size = comptime gen_02(&data);
     const transformed_data = comptime gen_03(&data, size);
